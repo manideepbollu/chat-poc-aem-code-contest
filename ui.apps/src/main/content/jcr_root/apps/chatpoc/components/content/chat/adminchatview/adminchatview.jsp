@@ -15,6 +15,10 @@
 
 <div id="queueList">There is no queue right now</div>
 
+<div id="adminChatBox">
+
+</div>
+
 <script type="text/javascript">
 
 $( document ).ready(function() {
@@ -50,6 +54,7 @@ $( document ).ready(function() {
 
     function acceptChat(key){
         alert("hi:: "+key);
+        var userType = '"customerRep"';
         $.ajax({
             url: "/content/chatqueue/data/"+key,
             type: "POST",
@@ -57,6 +62,9 @@ $( document ).ready(function() {
             success: function(result,status){
             	alert(status);
                 console.log("the status is "+status);
+                if(status == "success"){
+                    $("#adminChatBox").html("<input id= customerRep_"+key+" type='text' name='message'/><button onclick='sendMessage("+key+","+userType+")'>Send</button>")
+                }
 
             },
             error:function(result){
@@ -64,6 +72,24 @@ $( document ).ready(function() {
             }
         });  
    	}
+
+    function sendMessage(key, userType){
+        var newMessage = $("#"+userType+"_"+key).val();
+        alert("new message is "+newMessage);
+        var newMessageTime = $.now();
+        $.ajax({
+            url: "/content/chatqueue/data/"+key+"/"+newMessageTime,
+            type: "POST",
+            data: {message: newMessage, serviceOwner:currentUser, user: userType},
+            success: function(result,status){
+            	alert(status);
+                console.log("the status is "+status);
+            },
+            error:function(result){
+                console.log("error");
+            }
+        });  
+    }
 
 
 </script>

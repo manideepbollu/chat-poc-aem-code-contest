@@ -15,6 +15,7 @@
 <input id="primaryQuery" type="text" name="primaryQuery"/><br><br>
 <input id="chatButton" type="button" value="click here to Chat"/><br>
 <div id="div1"></div>
+<div id="userChatBox"></div>
 
 <script type="text/javascript">
 
@@ -25,6 +26,7 @@
       	alert( "Handler for .click() called." );
         var newChat = $.now();
         var query= $("#primaryQuery").val();
+        var userType = '"user"';
         $.ajax({
             url: "/content/chatqueue/data/"+newChat,
             type: "POST",
@@ -38,6 +40,7 @@
                         clearInterval(timerId);
                         console.log("your chat request has been accepted ");
             			$("#div1").html("your chat request has been accepted");
+                        $("#userChatBox").html("<input id= user_"+newChat+" type='text' name='message'/><button onclick='sendMessage("+newChat+","+userType+")'>Send</button>");
                     }
                 }, 1000);
         	},
