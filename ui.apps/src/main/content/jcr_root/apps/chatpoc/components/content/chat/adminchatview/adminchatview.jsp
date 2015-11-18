@@ -19,9 +19,11 @@
 
 $( document ).ready(function() {
     console.log( "ready!" );
-    setInterval(function(){ 
+    var currentUser = CQ_Analytics.ClientContextMgr.getId();
+    setInterval(function(){
         getchatRequests();
-	}, 1000);
+    }, 1000);
+
     function getchatRequests(){
         $.ajax({
             url: "/content/chatqueue.infinity.json",
@@ -32,15 +34,36 @@ $( document ).ready(function() {
                 $.each( result.data, function( key, val ) {
                     console.log(val.isNewRequest);
                     if(val.isNewRequest == "true"){
-                        $("#queueList").append("UserName :"+val['jcr:createdBy']+"<br>Query is"+val.queryFor+" <form action = '/content/chatqueue/data/"+key+"' method='POST'><input type='hidden' name='isNewRequest' value='false'/><input type='hidden' name='serviceOwner' value='test'/><input type='submit' value='Accept'/></form>");
+                        $("#queueList").append("UserName :"+val['jcr:createdBy']+"<br>Query is"+val.queryFor+"<br><button onclick='acceptChat("+key+")'>Accept Chat</button><br><br>");
                     }
                 });
             },
             error:function(result){
                 console.log("error");
             }
-        });
-    }
+        });  
+   }
+
+
 });
+
+
+    function acceptChat(key){
+        alert("hi:: "+key);
+        $.ajax({
+            url: "/content/chatqueue/data/"+key,
+            type: "POST",
+            data: {isNewRequest: "false", serviceOwner:currentUser},
+            success: function(result,status){
+            	alert(status);
+                console.log("the status is "+status);
+
+            },
+            error:function(result){
+                console.log("error");
+            }
+        });  
+   	}
+
 
 </script>
