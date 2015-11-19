@@ -12,10 +12,13 @@
 %>
 <h3>Chat Box </h3>
 <p>Provide your query and click on chat</p>
-<input id="primaryQuery" type="text" name="primaryQuery"/><br><br>
-<input id="chatButton" type="button" value="click here to Chat"/><br>
+<input id="primaryQuery" type="text" name="primaryQuery"/>
+<br><br>
+<input id="chatButton" type="button" value="click here to Chat"/>
+<br>
 <div id="div1"></div>
 <div id="userChatBox"></div>
+<div id="userChatMessages"></div>
 
 <script type="text/javascript">
 
@@ -41,6 +44,7 @@
                         console.log("your chat request has been accepted ");
             			$("#div1").html("your chat request has been accepted");
                         $("#userChatBox").html("<input id= user_"+newChat+" type='text' name='message'/><button onclick='sendMessage("+newChat+","+userType+")'>Send</button>");
+                        getMessages(newChat,userType.replace(/\"/g, ""));
                     }
                 }, 1000);
         	},
